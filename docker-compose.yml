@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  server:
+    build: ./server/.
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+      - PORT=8000
+    depends_on:
+      - redis
+  
+  client:
+    build: ./client/.
+    ports:
+      - '3000:3000'
+    environment:
+      - SERVER_HOST=server
+      - SERVER_port=3000
+      - PORT=3000
+    depends_on:
+      - server
+    
+  redis:
+    image: redis
+    volumes:
+      - ./redis-data:/data
+
